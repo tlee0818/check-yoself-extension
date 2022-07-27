@@ -1,25 +1,34 @@
-import React from 'react';
+import { Button } from '@mui/material';
+import React, { createContext, useReducer } from 'react';
 import logo from '../../assets/img/logo.svg';
-import Greetings from '../../containers/Greetings/Greetings';
+import api from './api';
+import Keywords from './components/keywords/Keywords';
+import Searchbar from './components/searchbar/Searchbar';
+import { initialState, reducer } from './model';
 import './Popup.css';
 
+const StateContext = createContext();
+const DispatchContext = createContext();
+
 const Popup = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const handleSubmit = async () => {
+    const { data } = await api.post('/factcheck', {
+      texts: state.keywords,
+    });
+
+    dispatch({ type: ACTION.SET_CLAIMS, payload: data.claims });
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/pages/Popup/Popup.jsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React!
-        </a>
-      </header>
+      <Searchbar dispatch={dispatch} />
+      <Keywords entities={state.keywords} dispatch={dispatch} />
+
+      <Button variant="text" onClick={handleSubmit}>
+        Factcheck
+      </Button>
     </div>
   );
 };

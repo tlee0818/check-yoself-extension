@@ -1,14 +1,12 @@
-import { Button } from '@mui/material';
-import React, { createContext, useReducer } from 'react';
-import logo from '../../assets/img/logo.svg';
+import React, { useReducer } from 'react';
 import api from './api';
 import Keywords from './components/keywords/Keywords';
 import Searchbar from './components/searchbar/Searchbar';
-import { initialState, reducer } from './model';
+import { ACTION, initialState, reducer, STATUS } from './model';
 import './Popup.css';
-
-const StateContext = createContext();
-const DispatchContext = createContext();
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import Claims from './components/claims/Claims';
+import QueryButtons from './components/queryButtons/QueryButtons';
 
 const Popup = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -19,17 +17,37 @@ const Popup = () => {
     });
 
     dispatch({ type: ACTION.SET_CLAIMS, payload: data.claims });
+    // dispatch({ type: ACTION.SET_STATUS, payload: STATUS.CLAIMS });
   };
 
   return (
-    <div className="App">
-      <Searchbar dispatch={dispatch} />
-      <Keywords entities={state.keywords} dispatch={dispatch} />
-
-      <Button variant="text" onClick={handleSubmit}>
-        Factcheck
-      </Button>
-    </div>
+    <Router>
+      <div className="App">
+        <div className="content">
+          <Routes>
+            <Route path="/popup.html">
+              <Route
+                path=""
+                element={
+                  <>
+                    <Searchbar dispatch={dispatch} />
+                    <Keywords entities={state.keywords} dispatch={dispatch} />
+                    <QueryButtons
+                      dispatch={dispatch}
+                      keywords={state.keywords}
+                    />
+                  </>
+                }
+              ></Route>
+            </Route>
+            <Route
+              path="/claims"
+              element={<Claims claims={state.claims} />}
+            ></Route>
+          </Routes>
+        </div>
+      </div>
+    </Router>
   );
 };
 

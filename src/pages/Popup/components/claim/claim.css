@@ -1,0 +1,9 @@
+.claim {
+    text-align: left;
+    margin-bottom: 1rem;
+    border-style: groove;
+}
+
+.claimText {
+    font-size: 1.25rem;
+}

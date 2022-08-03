@@ -6,14 +6,15 @@ import {
   ListItemText,
   OutlinedInput,
   InputAdornment,
+  Box,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { ACTION } from '../../model';
 import { useState } from 'react';
+import './keywords.css';
 
 const Keywords = ({ entities, dispatch }) => {
-  const [add, setAdd] = useState(false);
   const [newKeyword, setNewKeyword] = useState('');
   const handleRemove = (value) => {
     dispatch({ type: ACTION.REMOVE_KEYWORD, payload: value });
@@ -22,7 +23,6 @@ const Keywords = ({ entities, dispatch }) => {
   const handleAdd = (e) => {
     dispatch({ type: ACTION.ADD_KEYWORD, payload: newKeyword });
     setNewKeyword('');
-    setAdd(false);
   };
   useEffect(() => {
     console.log(entities);
@@ -31,46 +31,44 @@ const Keywords = ({ entities, dispatch }) => {
   return (
     <div>
       {entities && (
-        <List>
-          {entities.map((value, i) => {
-            return (
-              <ListItem
-                key={value}
-                secondaryAction={
-                  <IconButton
-                    aria-label="delete"
-                    onClick={() => handleRemove(value)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                }
-              >
-                <ListItemText primary={value} />
-              </ListItem>
-            );
-          })}
-        </List>
+        <div className="keyword-list">
+          <List style={{ width: 350 }} className="keyword-list">
+            {entities.map((value, i) => {
+              return (
+                <ListItem
+                  key={value}
+                  secondaryAction={
+                    <IconButton
+                      aria-label="delete"
+                      onClick={() => handleRemove(value)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  }
+                >
+                  <ListItemText
+                    primary={value}
+                    style={{ fontFamily: 'BlinkMacSystemFont' }}
+                  />
+                </ListItem>
+              );
+            })}
+          </List>
+        </div>
       )}
       {!entities && <h2>Search for Facts</h2>}
-      {add && (
-        <OutlinedInput
-          value={newKeyword}
-          onChange={(e) => setNewKeyword(e.target.value)}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={handleAdd}
-                edge="end"
-              >
-                <AddIcon />
-              </IconButton>
-            </InputAdornment>
-          }
-          label="Keyword"
-        />
-      )}
-      <AddIcon onClick={() => setAdd(true)} />
+      <OutlinedInput
+        value={newKeyword}
+        onChange={(e) => setNewKeyword(e.target.value)}
+        endAdornment={
+          <InputAdornment position="end">
+            <IconButton onClick={handleAdd} edge="end">
+              <AddIcon />
+            </IconButton>
+          </InputAdornment>
+        }
+        style={{ fontFamily: 'BlinkMacSystemFont', width: 350, height: 50 }}
+      />
     </div>
   );
 };

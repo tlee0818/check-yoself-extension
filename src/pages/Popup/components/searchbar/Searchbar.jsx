@@ -1,8 +1,9 @@
 import React from 'react';
-import { TextField, Button } from '@mui/material';
+import { TextareaAutosize, Button } from '@mui/material';
 import { useState } from 'react';
 import api from '../../api';
 import { ACTION } from '../../model';
+import './searchbar.css';
 
 const Searchbar = ({ dispatch }) => {
   const [comment, setComment] = useState('');
@@ -19,14 +20,19 @@ const Searchbar = ({ dispatch }) => {
   };
   return (
     <div>
-      <TextField
-        id="outlined-basic"
-        label="Comment"
-        variant="outlined"
+      <TextareaAutosize
+        maxRows={4}
+        aria-label="maximum height"
+        placeholder="Your Comment"
         value={comment}
         onChange={handleChange}
+        style={{ width: 350, fontSize: 20, fontFamily: 'BlinkMacSystemFont' }}
       />
-      <Button variant="text" onClick={handleSubmit}>
+      <Button
+        variant="text"
+        onClick={handleSubmit}
+        style={{ fontFamily: 'BlinkMacSystemFont' }}
+      >
         Get Keywords
       </Button>
     </div>
